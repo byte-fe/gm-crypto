@@ -1,6 +1,6 @@
 const test = require('ava')
 const toArrayBuffer = require('to-arraybuffer')
-const { SM4 } = require('../')
+const { SM4 } = require('../dist/')
 
 const { ECB, CBC } = SM4.constants
 

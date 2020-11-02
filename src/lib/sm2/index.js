@@ -1,12 +1,14 @@
-/* eslint-disable no-use-before-define */
-const { Buffer } = require('buffer') // 支持 Node.js & Browser
-const { BigInteger, SecureRandom } = require('jsbn')
-const toArrayBuffer = require('to-arraybuffer')
+import toArrayBuffer from 'to-arraybuffer'
+import { Buffer } from 'buffer' // 兼容浏览器环境
+import { BigInteger, SecureRandom } from 'jsbn'
 
-const { ECCurveFp } = require('./ec')
-const { C1C2C3, C1C3C2, PC } = require('./const')
-const { leftPad } = require('../utils')
-const SM3 = require('../sm3')
+import { ECCurveFp } from './ec'
+import { C1C2C3, C1C3C2, PC } from './const'
+import { leftPad } from '../utils'
+import SM3 from '../sm3'
+
+// SM2 相关常量
+export const constants = { C1C2C3, C1C3C2, PC }
 
 const rng = new SecureRandom()
 const { curve, G, n } = (() => {
@@ -48,7 +50,7 @@ const { curve, G, n } = (() => {
  * b) G 为基点，计算点 P = (xP,yP) = [d]G
  * c) 密钥对是 (d,P)，其中 d 为私钥，P 为公钥
  */
-const generateKeyPair = () => {
+export const generateKeyPair = () => {
   // a) 用随机数发生器产生整数 d ∈ [1,n−2]
   const d = new BigInteger(n.bitLength(), rng)
     .mod(n.subtract(new BigInteger('2')))
@@ -106,7 +108,7 @@ function KDF(Z, klen) {
  *   A7：计算 C3 = Hash(x2 ∥ M ∥ y2)；
  *   A8：输出密文 C = C1 ∥ C2 ∥ C3 or C1 ∥ C3 ∥ C2
  */
-function encrypt(data, publicKey, options) {
+export function encrypt(data, publicKey, options) {
   const { mode = C1C3C2, inputEncoding, outputEncoding } = options || {}
 
   // 明文消息类型校验 `string` | `ArrayBuffer` | `Buffer`
@@ -170,7 +172,7 @@ function encrypt(data, publicKey, options) {
  * B6：计算 u = Hash(x2 ∥ M′ ∥ y2)，从 C 中取出比特串 C3，若u ̸= C3，则报错并退出；
  * B7：输出明文M′
  */
-function decrypt(data, privateKey, options) {
+export function decrypt(data, privateKey, options) {
   const { mode = C1C3C2, inputEncoding, outputEncoding } = options || {}
 
   // 密文数据类型校验 `string` | `ArrayBuffer` | `Buffer`
@@ -228,11 +230,8 @@ function decrypt(data, privateKey, options) {
   return outputEncoding ? buff.toString(outputEncoding) : toArrayBuffer(buff)
 }
 
-module.exports = {
-  constants: {
-    C1C2C3,
-    C1C3C2
-  },
+export default {
+  constants,
   generateKeyPair,
   encrypt,
   decrypt

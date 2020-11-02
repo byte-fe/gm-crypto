@@ -1,6 +1,6 @@
-const { Buffer } = require('buffer') // 兼容浏览器环境
-const toArrayBuffer = require('to-arraybuffer')
-const { leftShift } = require('./utils')
+import toArrayBuffer from 'to-arraybuffer'
+import { Buffer } from 'buffer' // 兼容浏览器环境
+import { leftShift } from './utils'
 
 // 官方文档以比特作为操作单位，此处以字节作为操作单位。
 const padding = (buf) => {
@@ -96,7 +96,7 @@ const CF = (Vi, Bi, i) => {
   ]
 }
 
-const digest = (data, inputEncoding, outputEncoding) => {
+export const digest = (data, inputEncoding, outputEncoding) => {
   // 输入参数校验 `string` | `ArrayBuffer` | `Buffer`
   if (typeof data === 'string') {
     data = Buffer.from(data, inputEncoding || 'utf8')
@@ -146,4 +146,4 @@ const digest = (data, inputEncoding, outputEncoding) => {
   return outputEncoding ? hash.toString(outputEncoding) : toArrayBuffer(hash)
 }
 
-module.exports = { digest }
+export default { digest }

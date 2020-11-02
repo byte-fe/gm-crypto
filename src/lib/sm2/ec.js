@@ -3,7 +3,7 @@
 // Only Fp curves implemented for now
 
 // Requires jsbn.js and jsbn2.js
-const { BigInteger } = require('jsbn')
+import { BigInteger } from 'jsbn'
 const { Barrett } = BigInteger.prototype
 
 // Basic Javascript Elliptic Curve implementation
@@ -77,7 +77,7 @@ ECFieldElementFp.prototype.divide = feFpDivide
 // ECPointFp
 
 // constructor
-function ECPointFp(curve, x, y, z) {
+export function ECPointFp(curve, x, y, z) {
   this.curve = curve
   this.x = x
   this.y = y
@@ -320,7 +320,7 @@ ECPointFp.prototype.multiplyTwo = pointFpMultiplyTwo
 // ECCurveFp
 
 // constructor
-function ECCurveFp(q, a, b) {
+export function ECCurveFp(q, a, b) {
   this.q = q
   this.a = this.fromBigInteger(a)
   this.b = this.fromBigInteger(b)
@@ -413,8 +413,3 @@ ECCurveFp.prototype.fromBigInteger = curveFpFromBigInteger
 ECCurveFp.prototype.reduce = curveReduce
 ECCurveFp.prototype.decodePointHex = curveFpDecodePointHex
 ECCurveFp.prototype.encodePointHex = curveFpEncodePointHex
-
-module.exports = {
-  ECPointFp,
-  ECCurveFp
-}

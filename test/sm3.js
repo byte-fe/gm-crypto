@@ -1,6 +1,6 @@
 const test = require('ava')
 const toArrayBuffer = require('to-arraybuffer')
-const { SM3 } = require('../')
+const { SM3 } = require('../dist/')
 
 test('Validate unsupported types', (t) => {
   t.plan(4)

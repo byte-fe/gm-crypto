@@ -2,16 +2,20 @@
   "name": "gm-crypto",
   "version": "0.1.0",
   "description": "An implementation of GM/T industry standards",
-  "main": "index.js",
-  "module": "index.js",
+  "main": "dist/index.js",
+  "module": "dist/index.esm.js",
+  "esmodule": "dist/index.modern.js",
+  "unpkg": "dist/index.umd.js",
+  "umd:main": "dist/index.umd.js",
   "files": [
-    "lib"
+    "dist"
   ],
   "scripts": {
     "commit": "cz",
-    "test": "ava -v",
-    "watch": "ava -w",
-    "coverage": "nyc --reporter=html --reporter=text ava"
+    "build": "rm -rf dist && microbundle --entry src/index.js --sourcemap false",
+    "prepublish": "npm run build",
+    "test": "npm run build && ava -v",
+    "coverage": "npm run build && nyc --reporter=html --reporter=text ava"
   },
   "repository": {
     "type": "git",
@@ -39,6 +43,7 @@
     "commitizen": "^4.2.2",
     "cz-conventional-changelog": "^3.3.0",
     "husky": "^4.3.0",
+    "microbundle": "^0.12.4",
     "nyc": "^15.1.0",
     "prettier": "^2.1.2"
   },
@@ -49,7 +54,8 @@
   },
   "husky": {
     "hooks": {
-      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS",
+      "pre-push": "npm test"
     }
   }
 }

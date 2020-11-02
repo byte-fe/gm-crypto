@@ -1,6 +1,6 @@
 const test = require('ava')
 const toArrayBuffer = require('to-arraybuffer')
-const { SM2 } = require('../')
+const { SM2 } = require('../dist/')
 const { C1C2C3, C1C3C2 } = SM2.constants
 
 const { publicKey, privateKey } = SM2.generateKeyPair()

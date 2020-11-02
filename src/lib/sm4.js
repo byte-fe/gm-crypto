@@ -1,10 +1,12 @@
-const { Buffer } = require('buffer') // 兼容浏览器环境
-const toArrayBuffer = require('to-arraybuffer')
-const { leftShift } = require('./utils')
+import toArrayBuffer from 'to-arraybuffer'
+import { Buffer } from 'buffer' // 兼容浏览器环境
+import { leftShift } from './utils'
 
 // 两种分组模式
 const ECB = 1
 const CBC = 2
+
+export const constants = { ECB, CBC }
 
 // S 盒（非线性变换）
 const SBOX_TABLE = [
@@ -536,71 +538,68 @@ const _decrypt = (data, key, iv, outputEncoding) => {
 
 const REG_EXP_KEY = /^[0-9a-f]{32}$/i // 十六进制表示的加密密钥和初始化向量 iv
 
-module.exports = {
-  constants: {
-    ECB,
-    CBC
-  },
-  encrypt: (data, key, options) => {
-    let { mode, iv, inputEncoding, outputEncoding } = options || {}
+export const encrypt = (data, key, options) => {
+  let { mode, iv, inputEncoding, outputEncoding } = options || {}
 
-    // 输入参数校验 `string` | `ArrayBuffer` | `Buffer`
-    if (typeof data === 'string') {
-      data = Buffer.from(data, inputEncoding || 'utf8')
-    } else if (data instanceof ArrayBuffer) {
-      data = Buffer.from(data)
-    }
-    if (!Buffer.isBuffer(data)) {
-      throw new TypeError(
-        `Expected "string" | "Buffer" | "ArrayBuffer" but received "${Object.prototype.toString.call(
-          data
-        )}"`
-      )
-    }
-
-    // 十六进制表示的密钥
-    if (!REG_EXP_KEY.test(key)) {
-      throw new TypeError('Invalid value of cipher `key`')
-    }
-    key = Buffer.from(key, 'hex')
-
-    // CBC 分组必须制定 iv
-    if (mode === CBC && !REG_EXP_KEY.test(iv)) {
-      throw new TypeError('Invalid value of `iv` option')
-    }
-    iv = mode === CBC ? Buffer.from(iv, 'hex') : null
-
-    return _encrypt(data, key, iv, outputEncoding)
-  },
-  decrypt: (data, key, options) => {
-    let { mode, iv, inputEncoding, outputEncoding } = options || {}
-
-    // 输入参数校验 `string` | `ArrayBuffer` | `Buffer`
-    if (typeof data === 'string') {
-      data = Buffer.from(data, inputEncoding)
-    } else if (data instanceof ArrayBuffer) {
-      data = Buffer.from(data)
-    }
-    if (!Buffer.isBuffer(data)) {
-      throw new TypeError(
-        `Expected "string" | "Buffer" | "ArrayBuffer" but received "${Object.prototype.toString.call(
-          data
-        )}"`
-      )
-    }
-
-    // 十六进制表示的密钥
-    if (!REG_EXP_KEY.test(key)) {
-      throw new TypeError('Invalid value of cipher `key`')
-    }
-    key = Buffer.from(key, 'hex')
-
-    // CBC 分组必须制定 iv
-    if (mode === CBC && !REG_EXP_KEY.test(iv)) {
-      throw new TypeError('Invalid value of `iv` option')
-    }
-    iv = mode === CBC ? Buffer.from(iv, 'hex') : null
-
-    return _decrypt(data, key, iv, outputEncoding)
+  // 输入参数校验 `string` | `ArrayBuffer` | `Buffer`
+  if (typeof data === 'string') {
+    data = Buffer.from(data, inputEncoding || 'utf8')
+  } else if (data instanceof ArrayBuffer) {
+    data = Buffer.from(data)
   }
+  if (!Buffer.isBuffer(data)) {
+    throw new TypeError(
+      `Expected "string" | "Buffer" | "ArrayBuffer" but received "${Object.prototype.toString.call(
+        data
+      )}"`
+    )
+  }
+
+  // 十六进制表示的密钥
+  if (!REG_EXP_KEY.test(key)) {
+    throw new TypeError('Invalid value of cipher `key`')
+  }
+  key = Buffer.from(key, 'hex')
+
+  // CBC 分组必须制定 iv
+  if (mode === CBC && !REG_EXP_KEY.test(iv)) {
+    throw new TypeError('Invalid value of `iv` option')
+  }
+  iv = mode === CBC ? Buffer.from(iv, 'hex') : null
+
+  return _encrypt(data, key, iv, outputEncoding)
 }
+
+export const decrypt = (data, key, options) => {
+  let { mode, iv, inputEncoding, outputEncoding } = options || {}
+
+  // 输入参数校验 `string` | `ArrayBuffer` | `Buffer`
+  if (typeof data === 'string') {
+    data = Buffer.from(data, inputEncoding)
+  } else if (data instanceof ArrayBuffer) {
+    data = Buffer.from(data)
+  }
+  if (!Buffer.isBuffer(data)) {
+    throw new TypeError(
+      `Expected "string" | "Buffer" | "ArrayBuffer" but received "${Object.prototype.toString.call(
+        data
+      )}"`
+    )
+  }
+
+  // 十六进制表示的密钥
+  if (!REG_EXP_KEY.test(key)) {
+    throw new TypeError('Invalid value of cipher `key`')
+  }
+  key = Buffer.from(key, 'hex')
+
+  // CBC 分组必须制定 iv
+  if (mode === CBC && !REG_EXP_KEY.test(iv)) {
+    throw new TypeError('Invalid value of `iv` option')
+  }
+  iv = mode === CBC ? Buffer.from(iv, 'hex') : null
+
+  return _decrypt(data, key, iv, outputEncoding)
+}
+
+export default { constants, encrypt, decrypt }
