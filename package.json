@@ -1,8 +1,9 @@
 {
   "name": "gm-crypto",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "An implementation of GM/T industry standards",
   "main": "index.js",
+  "module": "index.js",
   "files": [
     "lib"
   ],
