@@ -5,7 +5,7 @@ import { BigInteger, SecureRandom } from 'jsbn'
 import { ECCurveFp } from './ec'
 import { C1C2C3, C1C3C2, PC } from './const'
 import { leftPad } from '../utils'
-import SM3 from '../sm3'
+import { digest } from '../sm3'
 
 // SM2 相关常量
 export const constants = { C1C2C3, C1C3C2, PC }
@@ -45,6 +45,34 @@ const { curve, G, n } = (() => {
 })()
 
 /**
+ * 密钥派生函数
+ * a) 初始化一个 32 比特构成的计数器 ct=0x00000001
+ * b) 对 i 从 1 到 ⌈klen/v⌉ 执行
+ *   b.1) 计算 Hai=Hv(Z ∥ ct)
+ *   b.2) ct++；
+ * c) 若 klen/v 是整数，令 Ha!⌈klen/v⌉ = Ha⌈klen/v⌉，否则令 Ha!⌈klen/v⌉ 为 Ha⌈klen/v⌉ 最左边的 (klen − (v × ⌊klen/v⌋)) 比特
+ * d) 令K = Ha1||Ha2|| · · · ||Ha⌈klen/v⌉−1||Ha!⌈klen/v⌉
+ */
+function KDF(Z, klen) {
+  const list = []
+  const times = Math.ceil(klen / 32)
+  const mod = klen % 32
+
+  for (let i = 1; i <= times; i++) {
+    const ct = Buffer.allocUnsafe(4)
+    ct.writeUInt32BE(i)
+
+    const hash = digest(Buffer.concat([Z, ct]))
+    // Fix: 浏览器端 Buffer.concat 实现有问题，处理不了 list 总长度超过 klen 的情况
+    list.push(
+      i === times && mod ? Buffer.from(hash).slice(0, mod) : Buffer.from(hash)
+    )
+  }
+
+  return Buffer.concat(list, klen)
+}
+
+/**
  * 生成密钥对
  * a) 用随机数发生器产生整数 d ∈ [1,n−2]
  * b) G 为基点，计算点 P = (xP,yP) = [d]G
@@ -66,34 +94,6 @@ export const generateKeyPair = () => {
 
   // 密钥对是 (d,P)，其中 d 为私钥，P 为公钥
   return { privateKey, publicKey }
-}
-
-/**
- * 密钥派生函数
- * a) 初始化一个 32 比特构成的计数器 ct=0x00000001
- * b) 对 i 从 1 到 ⌈klen/v⌉ 执行
- *   b.1) 计算 Hai=Hv(Z ∥ ct)
- *   b.2) ct++；
- * c) 若 klen/v 是整数，令 Ha!⌈klen/v⌉ = Ha⌈klen/v⌉，否则令 Ha!⌈klen/v⌉ 为 Ha⌈klen/v⌉ 最左边的 (klen − (v × ⌊klen/v⌋)) 比特
- * d) 令K = Ha1||Ha2|| · · · ||Ha⌈klen/v⌉−1||Ha!⌈klen/v⌉
- */
-function KDF(Z, klen) {
-  const list = []
-  const times = Math.ceil(klen / 32)
-  const mod = klen % 32
-
-  for (let i = 1; i <= times; i++) {
-    const ct = Buffer.allocUnsafe(4)
-    ct.writeUInt32BE(i)
-
-    const hash = SM3.digest(Buffer.concat([Z, ct]))
-    // Fix: 浏览器端 Buffer.concat 实现有问题，处理不了 list 总长度超过 klen 的情况
-    list.push(
-      i === times && mod ? Buffer.from(hash).slice(0, mod) : Buffer.from(hash)
-    )
-  }
-
-  return Buffer.concat(list, klen)
 }
 
 /**
@@ -155,7 +155,7 @@ export function encrypt(data, publicKey, options) {
   )
 
   // C3 = Hash(x2 ∥ M ∥ y2)
-  const C3 = SM3.digest(x2 + data.toString('hex') + y2, 'hex', 'hex')
+  const C3 = digest(x2 + data.toString('hex') + y2, 'hex', 'hex')
 
   const buff = Buffer.from(mode === C1C2C3 ? C1 + C2 + C3 : C1 + C3 + C2, 'hex')
   return outputEncoding ? buff.toString(outputEncoding) : toArrayBuffer(buff)
@@ -221,18 +221,11 @@ export function decrypt(data, privateKey, options) {
     .toString(16)
 
   // 计算 u = Hash(x2 ∥ M′ ∥ y2)
-  const u = SM3.digest(x2 + M + y2, 'hex', 'hex')
+  const u = digest(x2 + M + y2, 'hex', 'hex')
 
   // 合法性校验
   const verified = u === C3.toString('hex')
 
   const buff = verified ? Buffer.from(M, 'hex') : Buffer.alloc(0)
   return outputEncoding ? buff.toString(outputEncoding) : toArrayBuffer(buff)
-}
-
-export default {
-  constants,
-  generateKeyPair,
-  encrypt,
-  decrypt
 }

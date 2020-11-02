@@ -6,6 +6,7 @@ import { leftShift } from './utils'
 const ECB = 1
 const CBC = 2
 
+// SM4 相关常量
 export const constants = { ECB, CBC }
 
 // S 盒（非线性变换）
@@ -343,6 +344,8 @@ const CK = [
 
 // 分组大小
 const BLOCK_SIZE = 16 // 16 bytes
+// 十六进制表示的加密密钥和初始化向量 iv
+const REG_EXP_KEY = /^[0-9a-f]{32}$/i
 
 // 非线性变换 τ(.)
 const Tau = (a) => {
@@ -536,8 +539,6 @@ const _decrypt = (data, key, iv, outputEncoding) => {
   return outputEncoding ? buff.toString(outputEncoding) : toArrayBuffer(buff)
 }
 
-const REG_EXP_KEY = /^[0-9a-f]{32}$/i // 十六进制表示的加密密钥和初始化向量 iv
-
 export const encrypt = (data, key, options) => {
   let { mode, iv, inputEncoding, outputEncoding } = options || {}
 
@@ -601,5 +602,3 @@ export const decrypt = (data, key, options) => {
 
   return _decrypt(data, key, iv, outputEncoding)
 }
-
-export default { constants, encrypt, decrypt }

@@ -145,5 +145,3 @@ export const digest = (data, inputEncoding, outputEncoding) => {
 
   return outputEncoding ? hash.toString(outputEncoding) : toArrayBuffer(hash)
 }
-
-export default { digest }
