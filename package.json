@@ -1,0 +1,54 @@
+{
+  "name": "gm-crypto",
+  "version": "0.0.1",
+  "description": "An implementation of GM/T industry standards",
+  "main": "index.js",
+  "files": [
+    "lib"
+  ],
+  "scripts": {
+    "commit": "cz",
+    "test": "ava -v",
+    "watch": "ava -w",
+    "coverage": "nyc --reporter=html --reporter=text ava"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:byte-fe/gm-crypto.git"
+  },
+  "keywords": [
+    "sm2",
+    "sm3",
+    "sm4",
+    "zuc",
+    "gm",
+    "crypto"
+  ],
+  "author": "panjizhi1987@gmail.com",
+  "license": "MIT",
+  "dependencies": {
+    "buffer": "^5.7.0",
+    "jsbn": "^1.1.0",
+    "to-arraybuffer": "^1.0.1"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^11.0.0",
+    "@commitlint/config-conventional": "^11.0.0",
+    "ava": "^3.13.0",
+    "commitizen": "^4.2.2",
+    "cz-conventional-changelog": "^3.3.0",
+    "husky": "^4.3.0",
+    "nyc": "^15.1.0",
+    "prettier": "^2.1.2"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
+  },
+  "husky": {
+    "hooks": {
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
+    }
+  }
+}
