@@ -1,0 +1,10 @@
+language: node_js
+node_js:
+  - '14'
+
+before_script:
+  - npm install
+  - npm run build
+
+after_script:
+  - npm run coverage
