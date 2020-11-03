@@ -13,10 +13,8 @@
   "scripts": {
     "commit": "cz",
     "build": "rm -rf dist && microbundle --entry src/index.js --sourcemap false",
-    "test": "ava -v",
-    "precoverage": "npm run build",
-    "coverage": "nyc --reporter=html --reporter=text ava",
-    "prepublishOnly": "npm run build && npm test"
+    "test": "npm run build && nyc --reporter=lcov --reporter=html ava -v",
+    "prepublishOnly": "npm test"
   },
   "repository": {
     "type": "git",

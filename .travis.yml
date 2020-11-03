@@ -1,10 +1,12 @@
 language: node_js
 node_js:
+  - '12'
   - '14'
 
 before_script:
+  - npm install codecov -g
   - npm install
-  - npm run build
 
 after_script:
-  - npm run coverage
+  - codecov
+  - bash <(curl -s https://codecov.io/bash)
