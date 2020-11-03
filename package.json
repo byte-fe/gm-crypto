@@ -13,7 +13,7 @@
   "scripts": {
     "commit": "cz",
     "build": "rm -rf dist && microbundle --entry src/index.js --sourcemap false",
-    "test": "npm run build && nyc --reporter=lcov ava -v",
+    "test": "npm run build && nyc --reporter=text --reporter=lcov ava -v",
     "prepublishOnly": "npm test"
   },
   "repository": {
@@ -54,7 +54,7 @@
   "husky": {
     "hooks": {
       "commit-msg": "commitlint -E HUSKY_GIT_PARAMS",
-      "pre-push": "npm run build && npm test"
+      "pre-push": "npm test"
     }
   }
 }
