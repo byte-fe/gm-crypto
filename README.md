@@ -1,8 +1,9 @@
 # gm-crypto
 
-[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](#)
+[![Build Status](https://travis-ci.com/byte-fe/gm-crypto.svg?branch=main)](https://travis-ci.com/byte-fe/gm-crypto)
 [![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
 [![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](#)
 
 ![密码行业标准化委员会](./spec_header.png)
 
