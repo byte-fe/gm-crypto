@@ -12,8 +12,8 @@
   ],
   "scripts": {
     "commit": "cz",
-    "build": "rm -rf dist && microbundle --entry src/index.js --sourcemap false",
-    "test": "npm run build && nyc --reporter=text --reporter=lcov ava -v",
+    "build": "rm -rf dist && microbundle --entry src/index.js --sourcemap true",
+    "test": "npm run build && nyc --reporter=text --reporter=lcovonly ava -v",
     "prepublishOnly": "npm test"
   },
   "repository": {
