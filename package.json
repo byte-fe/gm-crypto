@@ -1,6 +1,6 @@
 {
   "name": "gm-crypto",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "An implementation of GM/T industry standards",
   "main": "dist/index.js",
   "module": "dist/index.esm.js",
