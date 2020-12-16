@@ -1,5 +1,11 @@
 declare module "gm-crypto" {
   export namespace SM2 {
+    export enum constants {
+      C1C2C3,
+      C1C3C2,
+      /** 未压缩 */
+      PC = '04'
+    }
     /** Generates a new asymmetric key pair */
     export function generateKeyPair(): {
       privateKey: string;
@@ -22,29 +28,29 @@ declare module "gm-crypto" {
     export interface EncryptOptions {
       /** 
        * Concatenation mode
-       * @default "C1C3C2"
+       * @default SM2.constants.C1C3C2
        *  */
-      mode?: "C1C3C2" | "C1C2C3";
+      mode?: SM2.constants;
       /** 
        * The encoding of the plain data string,if `data` is not a string then `inputEncoding` is ignored.
        * @default "utf8"
        */
-      inputEncoding?: string;
+      inputEncoding?: BufferEncoding;
       /** If `outputEncoding` is provided, a string will be returned, otherwise a [ArrayBuffer](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer) is returned. */
       outputEncoding?: string;
     }
     export interface DecryptOptions {
       /** 
        * Concatenation mode
-       * @default "C1C3C2" 
+       * @default SM2.constants.C1C3C2
        *  */
-      mode?: "C1C3C2" | "C1C2C3";
+      mode?: SM2.constants;
       /** 
        * The encoding of the plain data string,if `data` is not a string then `inputEncoding` is ignored.
        */
-      inputEncoding?: string;
+      inputEncoding?: BufferEncoding;
       /** If `outputEncoding` is provided, a string will be returned, otherwise a [ArrayBuffer](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer) is returned. */
-      outputEncoding?: string;
+      outputEncoding?: BufferEncoding;
     }
   }
   export namespace SM3 {
@@ -57,6 +63,10 @@ declare module "gm-crypto" {
     export function digest(data: string | ArrayBuffer | Buffer, inputEncoding?: string, outputEncoding?: string): string | ArrayBuffer;
   }
   export namespace SM4 {
+    export enum constants {
+      ECB = 1,
+      CBC
+    }
     /**
      * Encrypt data.
      * @param data Plain message
@@ -67,9 +77,9 @@ declare module "gm-crypto" {
     export interface EncryptOptions {
       /**
        * Block cipher mode
-       * @default "ECB"
+       * @default SM4.constants.ECB
        */
-      mode?: "ECB" | "CBC";
+      mode?: SM4.constants;
       /**
        * Initialization vector(any string of 32 hexadecimal digits)
        */
@@ -78,9 +88,9 @@ declare module "gm-crypto" {
        * The encoding of the plain data string,if data is not a string then inputEncoding is ignored.
        * @default "utf8"
        */
-      inputEncoding?: string;
+      inputEncoding?: BufferEncoding;
       /** If `outputEncoding` is provided, a string will be returned, otherwise a [ArrayBuffer](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer) is returned. */
-      outputEncoding?: string;
+      outputEncoding?: BufferEncoding;
     }
     /**
      * Decrypt data.
@@ -94,7 +104,7 @@ declare module "gm-crypto" {
        * Block cipher mode
        * @default "ECB"
        */
-      mode?: "ECB" | "CBC";
+      mode?: SM4.constants;
       /**
        * Initialization vector(any string of 32 hexadecimal digits)
        */
@@ -102,8 +112,9 @@ declare module "gm-crypto" {
       /**
        * The encoding of the plain data string,if data is not a string then inputEncoding is ignored.
        */
-      inputEncoding?: string;
+      inputEncoding?: BufferEncoding;
       /** If `outputEncoding` is provided, a string will be returned, otherwise a [ArrayBuffer](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer) is returned. */
-      outputEncoding?: string;
+      outputEncoding?: BufferEncoding;
     }
   }
+}
