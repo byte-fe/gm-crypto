@@ -107,9 +107,12 @@ export const generateKeyPair = () => {
  *   A6：计算 C2 = M ⊕ t；
  *   A7：计算 C3 = Hash(x2 ∥ M ∥ y2)；
  *   A8：输出密文 C = C1 ∥ C2 ∥ C3 or C1 ∥ C3 ∥ C2
+ *
+ *   @param {string|Buffer|ArrayBuffer} data
+ *   @param {string} publicKey
  */
 export function encrypt(data, publicKey, options) {
-  const { mode = C1C3C2, inputEncoding, outputEncoding } = options || {}
+  const { mode = C1C3C2, inputEncoding, outputEncoding, pc } = options || {}
 
   // 明文消息类型校验 `string` | `ArrayBuffer` | `Buffer`
   if (typeof data === 'string') {
@@ -157,7 +160,7 @@ export function encrypt(data, publicKey, options) {
   // C3 = Hash(x2 ∥ M ∥ y2)
   const C3 = digest(x2 + data.toString('hex') + y2, 'hex', 'hex')
 
-  const buff = Buffer.from(mode === C1C2C3 ? C1 + C2 + C3 : C1 + C3 + C2, 'hex')
+  const buff = Buffer.from((pc ? '04' : '') + (mode === C1C2C3 ? C1 + C2 + C3 : C1 + C3 + C2), 'hex')
   return outputEncoding ? buff.toString(outputEncoding) : toArrayBuffer(buff)
 }
 
@@ -171,9 +174,12 @@ export function encrypt(data, publicKey, options) {
  * B5：从 C 中取出比特串 C2，计算 M′ = C2 ⊕ t；
  * B6：计算 u = Hash(x2 ∥ M′ ∥ y2)，从 C 中取出比特串 C3，若u ̸= C3，则报错并退出；
  * B7：输出明文M′
+ *
+ * @param {string|Buffer|ArrayBuffer} data
+ * @param {string} publicKey
  */
 export function decrypt(data, privateKey, options) {
-  const { mode = C1C3C2, inputEncoding, outputEncoding } = options || {}
+  const { mode = C1C3C2, inputEncoding, outputEncoding, pc } = options || {}
 
   // 密文数据类型校验 `string` | `ArrayBuffer` | `Buffer`
   if (typeof data === 'string') {
@@ -188,6 +194,7 @@ export function decrypt(data, privateKey, options) {
       )}"`
     )
   }
+  data = pc ? data.slice(1) : data
 
   const unit = 32
 

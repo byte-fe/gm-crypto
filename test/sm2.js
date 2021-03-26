@@ -251,3 +251,33 @@ test('Validate type of plain data', (t) => {
     { instanceOf: TypeError }
   )
 })
+
+test('C1 with PC', (t) => {
+  t.plan(2)
+
+  let cipherData, plainData
+
+  // hex
+  cipherData = SM2.encrypt(data, publicKey, {
+    inputEncoding: 'utf8',
+    outputEncoding: 'hex'
+  })
+  plainData = SM2.decrypt('04' + cipherData, privateKey, {
+    inputEncoding: 'hex',
+    outputEncoding: 'utf8',
+    pc: 1
+  })
+  t.is(plainData, data)
+
+  // base64
+  cipherData = SM2.encrypt(data, publicKey, {
+    inputEncoding: 'utf8',
+    outputEncoding: 'hex',
+    pc: 1
+  })
+  plainData = SM2.decrypt(cipherData.substr(2), privateKey, {
+    inputEncoding: 'hex',
+    outputEncoding: 'utf8'
+  })
+  t.is(plainData, data)
+})
