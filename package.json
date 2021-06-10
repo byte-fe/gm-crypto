@@ -8,7 +8,10 @@
   "unpkg": "dist/index.umd.js",
   "umd:main": "dist/index.umd.js",
   "types": "types/index.d.ts",
-  "files": ["types", "dist"],
+  "files": [
+    "types",
+    "dist"
+  ],
   "scripts": {
     "commit": "cz",
     "clean": "rm -rf dist",
@@ -21,7 +24,14 @@
     "type": "git",
     "url": "git@github.com:byte-fe/gm-crypto.git"
   },
-  "keywords": ["sm2", "sm3", "sm4", "zuc", "gm", "crypto"],
+  "keywords": [
+    "sm2",
+    "sm3",
+    "sm4",
+    "zuc",
+    "gm",
+    "crypto"
+  ],
   "author": "panjizhi1987@gmail.com",
   "license": "MIT",
   "dependencies": {
