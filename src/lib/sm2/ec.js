@@ -64,6 +64,36 @@ function feFpDivide(b) {
   )
 }
 
+function feFpPower(exponent) {
+  var base = this.x
+  var result = BigInteger.ONE
+  for (var i = 0; i < exponent.bitLength(); ++i) {
+    if (exponent.testBit(i))
+      result = result.multiply(base).mod(this.q)
+
+    base = base.shiftLeft(1).mod(this.q)
+  }
+
+  return new ECFieldElementFp(
+    this.q,
+    result
+  )
+}
+
+function feFpIsSquareRoot() {
+  // x^((q-1)/2) mod q == q - 1 or 1
+  return this.power(
+           this.q.subtract(BigInteger.ONE).shiftRight(1).toBigInteger())
+         .equals(BigInteger.ONE)
+}
+
+function feFpClone() {
+  return new ECFieldElementFp(
+    this.q,
+    this.x
+  )
+}
+
 ECFieldElementFp.prototype.equals = feFpEquals
 ECFieldElementFp.prototype.toBigInteger = feFpToBigInteger
 ECFieldElementFp.prototype.negate = feFpNegate
@@ -72,6 +102,9 @@ ECFieldElementFp.prototype.subtract = feFpSubtract
 ECFieldElementFp.prototype.multiply = feFpMultiply
 ECFieldElementFp.prototype.square = feFpSquare
 ECFieldElementFp.prototype.divide = feFpDivide
+ECFieldElementFp.prototype.power = feFpPower
+ECFieldElementFp.prototype.isSquareRoot = feFpIsSquareRoot
+ECFieldElementFp.prototype.clone = feFpClone
 
 // ----------------
 // ECPointFp
@@ -340,6 +373,78 @@ function curveFpGetB() {
   return this.b
 }
 
+function curveFpDecodeY(x) {
+  // calculate x^3 + a*x + b mod p
+  var y2 = x.square()
+            .multiply(x)
+            .add(x.multiply(new ECFieldElementFp(this.q, this.a)))
+            .add(new ECFieldElementFp(this.q, this.b))
+
+  if (!y2.isSquareRoot())
+    return this.infinity
+
+  var p = this.q.sub(BigInteger.ONE)
+  var e = BigInteger.ZERO
+  var s = BigInteger.ONE
+  for (var i = 0; i < p.bitLength(); ++i) {
+    if (!p.testBit(i)) {
+      s = p.shiftRight(i)
+      break;
+  }
+
+    e = e.add(BigInteger.ONE)
+  }
+
+  var FONE = new ECFieldElementFp(this.q, BigInteger.ONE)
+  var FTWO = FONE.add(FONE)
+  var z = FTWO.clone()
+  for (; !z.toBigInteger().equals(y2); z = z.add(FONE)) {
+    if (!z.isSquareRoot())
+      break;
+  }
+
+  if (z.equals(y2))
+    return this.infinity
+
+  // x(R) = y2^((s+1)/2) 
+  var x = new ECFieldElementFp(this.q, y2.toBigInteger()).power(s.add(1).shiftRight(1))
+  // b(t) = y2^s
+  var b = new ECFieldElementFp(this.q, y2.toBigInteger()).power(s)
+  // g(c) = z^s
+  var g = new ECFieldElementFp(this.q, z.toBigInteger()).power(s)
+  // r(M) = e
+  var r = e.clone()
+
+  while (true) {
+    if (b.toBigInteger().equals(BigInteger.ONE))
+      return new ECFieldElementFp(this.q, x.toBigInteger().min(x.div(new ECFieldElementFp(this.q)))
+    else if (b.toBigInteger().equals(BigInteger.ZERO))
+      return this.infinity
+
+    var i = BigInteger.ONE
+    for (; i.intValue() < e.intValue(); i = i.add(BigInteger.ONE)) {
+      if (b.power(FTWO.power(i).toBigInteger()).equals(BigInteger.ONE)) {
+        b = b.power(FTWO.power(i).toBigInteger())
+        break;
+      }
+    }
+
+    if (!b.toBigInteger().equasl(BigInteger.ONE))
+      return this.infinity
+
+    // c(b) = g^(2^(r - i - 1))
+    var c = g.power(FTWO.power(r.sub(i.toInteger().add(BigInteger.ONE)).toBigInteger()).toBigInteger())
+    // r(M) = i
+    r = i.clone()
+    // g(c) = b^2
+    g = c.power(BigInteger.ONE.add(BigInteger.ONE))
+    // b(t) = b*c^2
+    b = b.multiply(c.square())
+    // x(R) = x*c
+    x = x.multiply(c)
+  }
+}
+
 function curveFpEquals(other) {
   if (other == this) return true
   return (
@@ -369,7 +474,13 @@ function curveFpDecodePointHex(s) {
     case 2:
     case 3:
       // point compression not supported yet
-      return null
+      var len = (s.length - 2)
+      var xHex = s.substr(2, len)
+      return new ECPointFp(
+        this,
+        this.fromBigInteger(new BigInteger(xHex, 16)),
+        this.decodeY()
+      )
     case 4:
     case 6:
     case 7:
@@ -407,6 +518,7 @@ function curveFpEncodePointHex(p) {
 ECCurveFp.prototype.getQ = curveFpGetQ
 ECCurveFp.prototype.getA = curveFpGetA
 ECCurveFp.prototype.getB = curveFpGetB
+ECCurveFp.prototype.decodeY = curveFpDecodeY
 ECCurveFp.prototype.equals = curveFpEquals
 ECCurveFp.prototype.getInfinity = curveFpGetInfinity
 ECCurveFp.prototype.fromBigInteger = curveFpFromBigInteger
