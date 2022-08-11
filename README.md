@@ -96,14 +96,14 @@ decryptedData = SM4.decrypt(encryptedData, key, {
 // CBC
 const iv = '0123456789abcdeffedcba9876543210' // Initialization vector(any string of 32 hexadecimal digits)
 encryptedData = SM4.encrypt(originalData, key, {
-  iv,
-  mode: SM2.constants.CBC,
+  iv: iv,
+  mode: SM4.constants.CBC,
   inputEncoding: 'utf8',
   outputEncoding: 'hex'
 })
 decryptedData = SM4.decrypt(encryptedData, key, {
-  iv,
-  mode: SM2.constants.CBC,
+  iv: iv,
+  mode: SM4.constants.CBC,
   inputEncoding: 'hex',
   outputEncoding: 'utf8'
 })
