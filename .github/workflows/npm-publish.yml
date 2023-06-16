@@ -34,11 +34,7 @@ jobs:
       - run: npm build
       - run: npm test
       - run: env
-        env:
-          NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
-          NPM_TOKEN: ${{secrets.NPM_TOKEN}}
       - run: cat /home/runner/work/_temp/.npmrc
       - run: npm publish
         env:
-          NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
-          NPM_TOKEN: ${{secrets.NPM_TOKEN}}
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
