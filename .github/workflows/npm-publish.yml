@@ -29,4 +29,4 @@ jobs:
 #           NPM_CONFIG_USERCONFIG: /home/runner/work/gm-crypto/gm-crypto/.npmrc
       - run: npm publish
         env:
-          NODE_AUTH_TOKEN: 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
+          NODE_AUTH_TOKEN: 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
