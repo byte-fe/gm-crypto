@@ -15,7 +15,7 @@ jobs:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
-          node-version: 16
+          node-version: 14
       - run: npm install
       - run: npm test
 
@@ -26,10 +26,10 @@ jobs:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
-          node-version: 16
+          node-version: 14
           registry-url: https://registry.npmjs.org/
       - run: npm install
-      - run: echo ${{secrets.NPM_TOKEN}} && echo "${NODE_AUTH_TOKEN}:${NPM_TOKEN}"
+      - run: echo 123 && echo $NODE_AUTH_TOKEN && echo $NPM_TOKEN
         env:
           NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
           NPM_TOKEN: ${{secrets.NPM_TOKEN}}
