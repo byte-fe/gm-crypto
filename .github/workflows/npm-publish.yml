@@ -15,15 +15,17 @@ jobs:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
-          node-version: 14
-          registry-url: https://registry.npmjs.org/
-          always-auth: true
+          node-version: '14.x'
+          registry-url: 'https://registry.npmjs.org'
+          always-auth: 'true'
       - run: npm install
       - run: npm build
       - run: npm test
       - run: env
       - run: cat /home/runner/work/_temp/.npmrc
       - run: npm whoami
+        env:
+          NODE_AUTH_TOKEN: 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
       - run: npm publish
         env:
           NODE_AUTH_TOKEN: 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
