@@ -26,6 +26,7 @@ jobs:
       - run: npm whoami
         env:
           NODE_AUTH_TOKEN: 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
+          NPM_CONFIG_USERCONFIG: ./.npmrc
       - run: npm publish
         env:
           NODE_AUTH_TOKEN: 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
