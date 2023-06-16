@@ -23,10 +23,10 @@ jobs:
       - run: npm test
       - run: env
       - run: cat /home/runner/work/_temp/.npmrc
-      - run: npm whoami
-        env:
-          NODE_AUTH_TOKEN: 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
-          NPM_CONFIG_USERCONFIG: /home/runner/work/gm-crypto/gm-crypto/.npmrc
+#       - run: npm whoami
+#         env:
+#           NODE_AUTH_TOKEN: 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
+#           NPM_CONFIG_USERCONFIG: /home/runner/work/gm-crypto/gm-crypto/.npmrc
       - run: npm publish
         env:
           NODE_AUTH_TOKEN: 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
