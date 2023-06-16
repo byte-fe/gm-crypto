@@ -16,21 +16,18 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: 14
-          always-auth: 'true'
       - run: npm install
       - run: npm test
 
   publish-npm:
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      packages: write
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
           node-version: 14
           registry-url: https://registry.npmjs.org/
+          always-auth: true
       - run: npm install
       - run: npm build
       - run: npm test
