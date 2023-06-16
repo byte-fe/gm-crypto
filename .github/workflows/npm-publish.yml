@@ -3,9 +3,10 @@
 
 name: npm-publish
 
-on:
-  release:
-    types: [created]
+on: [push]
+# on:
+#   release:
+#     types: [created]
 
 jobs:
   build:
@@ -28,6 +29,11 @@ jobs:
           node-version: 16
           registry-url: https://registry.npmjs.org/
       - run: npm install
+      - run: echo ${{secrets.NPM_TOKEN}} && echo "${NODE_AUTH_TOKEN}:${NPM_TOKEN}"
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
+          NPM_TOKEN: ${{secrets.NPM_TOKEN}}
+      - run: cat /home/runner/work/_temp/.npmrc
       - run: npm publish
         env:
           NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
