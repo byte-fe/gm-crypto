@@ -8,7 +8,7 @@
 
 ![密码行业标准化委员会](./spec_header.png)
 
-A pure JavaScript implementation of GM/T series cryptographic algorithms for Node.js and browsers, with type declaration files support.
+A pure JavaScript implementation of GM/T series(sm2,sm3,sm4) cryptographic algorithms compatible with Node.js and browsers, with type declaration files support.
 
 - [GM/T0003-2012《SM2 public key cryptographic algorithm based on elliptic curves》](http://www.oscca.gov.cn/sca/xxgk/2010-12/17/content_1002386.shtml)
 - [GM/T0004-2012《SM3 cryptographic hash algorithm》](https://www.oscca.gov.cn/sca/xxgk/2010-12/17/content_1002389.shtml)
