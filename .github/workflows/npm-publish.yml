@@ -20,7 +20,6 @@ jobs:
       - run: npm test
 
   publish-npm:
-    needs: build
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -29,7 +28,9 @@ jobs:
           node-version: 14
           registry-url: https://registry.npmjs.org/
       - run: npm install
-      - run: echo 123 && echo $NODE_AUTH_TOKEN && echo $NPM_TOKEN
+      - run: npm build
+      - run: npm test
+      - run: env
         env:
           NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
           NPM_TOKEN: ${{secrets.NPM_TOKEN}}
