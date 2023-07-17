@@ -89,6 +89,11 @@ declare module "gm-crypto" {
        */
       iv?: string;
       /**
+       * Padding Type ('pkcs#7' | 'pkcs#5' | 'none' | 'zero' | 'null')
+       * @default "pkcs#7"
+       */
+      paddingType?: string;
+      /**
        * The encoding of the plain data string,if data is not a string then inputEncoding is ignored.
        * @default "utf8"
        */
