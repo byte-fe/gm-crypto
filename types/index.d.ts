@@ -33,6 +33,10 @@ declare module "gm-crypto" {
        * @default SM2.constants.C1C3C2
        *  */
       mode?: SM2.constants;
+      /**
+       * PC (? | 04) 
+       */
+      pc?: string;
       /** 
        * The encoding of the plain data string,if `data` is not a string then `inputEncoding` is ignored.
        * @default "utf8"
@@ -47,6 +51,10 @@ declare module "gm-crypto" {
        * @default SM2.constants.C1C3C2
        *  */
       mode?: SM2.constants;
+      /**
+       * PC (? | 04) 
+       */
+      pc?: string;
       /** 
        * The encoding of the plain data string,if `data` is not a string then `inputEncoding` is ignored.
        */
