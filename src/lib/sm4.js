@@ -408,6 +408,18 @@ const decryptBlock = (X, MK) => {
   return [X[35], X[34], X[33], X[32]]
 }
 
+// 填充
+const padding = (data, paddingType) => {
+  // 判断 paddingType，默认是 pkcs#7 （传 pkcs#5 也会走 pkcs#7 填充）, 'zero' ｜ 'none' | 'null' 填充 0
+  if (paddingType === 'zero' || paddingType === 'none' || paddingType === 'null') {
+    const paddingSize = BLOCK_SIZE - (data.length % BLOCK_SIZE)
+    const paddingBuff = Buffer.alloc(paddingSize, 0)
+    return Buffer.concat([data, paddingBuff], data.length + paddingSize)
+  } else if (paddingType === 'pkcs#7' || paddingType === 'pkcs#5') {
+    return pkcs7Padding(data)
+  }
+}
+
 // 分组填充 https://en.wikipedia.org/wiki/Padding_(cryptography)#PKCS#5_and_PKCS#7
 const pkcs7Padding = (data) => {
   const paddingSize = BLOCK_SIZE - (data.length % BLOCK_SIZE)
@@ -432,13 +444,13 @@ const toCipcherBlock = (array) => {
   return block
 }
 
-const _encrypt = (data, key, iv, outputEncoding) => {
+const _encrypt = (data, key, iv, paddingType, outputEncoding) => {
   // 初始化向量转换
   iv && (iv = toInt32Array(iv))
   // 密钥转换
   key = toInt32Array(key)
   // 分组填充
-  data = pkcs7Padding(data)
+  data = padding(data, paddingType)
 
   // 分组加密结果
   const blocks = []
@@ -540,7 +552,7 @@ const _decrypt = (data, key, iv, outputEncoding) => {
 }
 
 export const encrypt = (data, key, options) => {
-  let { mode, iv, inputEncoding, outputEncoding } = options || {}
+  let { mode, iv, paddingType = 'pkcs#7', inputEncoding, outputEncoding } = options || {}
 
   // 输入参数校验 `string` | `ArrayBuffer` | `Buffer`
   if (typeof data === 'string') {
@@ -568,7 +580,7 @@ export const encrypt = (data, key, options) => {
   }
   iv = mode === CBC ? Buffer.from(iv, 'hex') : null
 
-  return _encrypt(data, key, iv, outputEncoding)
+  return _encrypt(data, key, iv, paddingType, outputEncoding)
 }
 
 export const decrypt = (data, key, options) => {

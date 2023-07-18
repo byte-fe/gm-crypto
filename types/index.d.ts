@@ -33,6 +33,10 @@ declare module "gm-crypto" {
        * @default SM2.constants.C1C3C2
        *  */
       mode?: SM2.constants;
+      /**
+       * PC (? | 04) 
+       */
+      pc?: string;
       /** 
        * The encoding of the plain data string,if `data` is not a string then `inputEncoding` is ignored.
        * @default "utf8"
@@ -47,6 +51,10 @@ declare module "gm-crypto" {
        * @default SM2.constants.C1C3C2
        *  */
       mode?: SM2.constants;
+      /**
+       * PC (? | 04) 
+       */
+      pc?: string;
       /** 
        * The encoding of the plain data string,if `data` is not a string then `inputEncoding` is ignored.
        */
@@ -88,6 +96,11 @@ declare module "gm-crypto" {
        * Initialization vector(any string of 32 hexadecimal digits)
        */
       iv?: string;
+      /**
+       * Padding Type ('pkcs#7' | 'pkcs#5' | 'none' | 'zero' | 'null')
+       * @default "pkcs#7"
+       */
+      paddingType?: string;
       /**
        * The encoding of the plain data string,if data is not a string then inputEncoding is ignored.
        * @default "utf8"
