@@ -12,13 +12,13 @@
   "scripts": {
     "commit": "cz",
     "clean": "rm -rf dist",
-    "build": "npm run clean && microbundle --entry src/index.js --sourcemap false",
-    "build:coverage": "npm run clean && microbundle --entry src/index.js --sourcemap true",
+    "build": "npm run clean && npm run build:rollup",
+    "build:coverage": "npm run clean && npm run build:rollup",
     "test": "npm run build:coverage && nyc --reporter=json ava -v",
     "prepublishOnly": "npm run build",
     "build:wasm": "wasm-bindgen --out-dir ./src/wasm/pkg --typescript ./target/wasm32-unknown-unknown/release/gm_crypto_wasm.wasm",
     "build:rollup": "rollup --config",
-    "test:ava": "ava"
+    "test:ava": "npm run build:rollup && ava && npm run clean"
   },
   "repository": {
     "type": "git",
@@ -28,7 +28,6 @@
   "author": "panjizhi1987@gmail.com",
   "license": "MIT",
   "dependencies": {
-    "@wasm-tool/rollup-plugin-rust": "^2.4.4",
     "buffer": "^5.7.0",
     "jsbn": "^1.1.0",
     "to-arraybuffer": "^1.0.1"
@@ -39,6 +38,7 @@
     "@rollup/plugin-commonjs": "^22.0.2",
     "@rollup/plugin-node-resolve": "^13.3.0",
     "@rollup/plugin-wasm": "^6.2.2",
+    "@wasm-tool/rollup-plugin-rust": "^2.4.4",
     "ava": "^3.13.0",
     "commitizen": "^4.2.2",
     "cz-conventional-changelog": "^3.3.0",
@@ -59,7 +59,7 @@
   "husky": {
     "hooks": {
       "commit-msg": "commitlint -E HUSKY_GIT_PARAMS",
-      "pre-push": "npm test"
+      "pre-push": "npm run test:ava"
     }
   },
   "ava": {
