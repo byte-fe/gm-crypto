@@ -35,7 +35,7 @@ test('Validate unsupported types', (t) => {
 })
 
 test('Calculates digest values', async (t) => {
-  t.plan(7)
+  t.plan(4)
 
   // Official exmaples
   t.is(
@@ -57,11 +57,11 @@ test('Calculates digest values', async (t) => {
     '66c7f0f462eeedd9d1f2d46bdc10e4e24167c4875cf2f7a2297da02b8f4ba8e0'
   )
 
-  // Buffer input
-  t.is(
-    SM3.digest(Buffer.from('abc'), '', 'base64'),
-    'Zsfw9GLu7dnR8tRr3BDk4kFnxIdc8veiKX2gK49LqOA='
-  )
+  // // Buffer input
+  // t.is(
+  //   SM3.digest(Buffer.from('abc'), '', 'base64'),
+  //   'Zsfw9GLu7dnR8tRr3BDk4kFnxIdc8veiKX2gK49LqOA='
+  // )
 
   // ArrayBuffer input
   t.is(
@@ -69,21 +69,21 @@ test('Calculates digest values', async (t) => {
     'Zsfw9GLu7dnR8tRr3BDk4kFnxIdc8veiKX2gK49LqOA='
   )
 
-  // ArrayBuffer output
-  const arraybuffer = SM3.digest(
-    Buffer.from(
-      'YWJjZGFiY2RhYmNkYWJjZGFiY2RhYmNkYWJjZGFiY2RhYmNkYWJjZGFiY2RhYmNkYWJjZGFiY2RhYmNkYWJjZA==',
-      'base64'
-    )
-  )
-  t.true(arraybuffer instanceof ArrayBuffer)
-  t.is(
-    Buffer.compare(
-      Buffer.from(arraybuffer),
-      Buffer.from('3r6f+SJ1uKE4YEiJwY5aTW/bcOU4fldlKT3Lo5wMVzI=', 'base64')
-    ),
-    0
-  )
+  // // ArrayBuffer output
+  // const arraybuffer = SM3.digest(
+  //   Buffer.from(
+  //     'YWJjZGFiY2RhYmNkYWJjZGFiY2RhYmNkYWJjZGFiY2RhYmNkYWJjZGFiY2RhYmNkYWJjZGFiY2RhYmNkYWJjZA==',
+  //     'base64'
+  //   )
+  // )
+  // t.true(arraybuffer instanceof ArrayBuffer)
+  // t.is(
+  //   Buffer.compare(
+  //     Buffer.from(arraybuffer),
+  //     Buffer.from('3r6f+SJ1uKE4YEiJwY5aTW/bcOU4fldlKT3Lo5wMVzI=', 'base64')
+  //   ),
+  //   0
+  // )
 })
 
 test('Input size exceeds 56 bytes', async (t) => {

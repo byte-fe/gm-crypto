@@ -109,6 +109,85 @@ decryptedData = SM4.decrypt(encryptedData, key, {
 })
 ```
 
+### WASM
+
+#### SM2
+
+> Public Key Cryptographic Algorithm Based on Elliptic Curves.
+
+```js
+const { SM2_WASM } = require('gm-crypto')
+
+const { publicKey, privateKey } = await SM2_WASM.generateKeyPair()
+const originalData = 'SM2 椭圆曲线公钥密码算法'
+
+const encryptedData = await SM2_WASM.encrypt(originalData, publicKey, {
+  inputEncoding: 'utf8',
+  outputEncoding: 'base64'
+})
+
+const decryptedData = await SM2_WASM.decrypt(encryptedData, privateKey, {
+  inputEncoding: 'base64',
+  outputEncoding: 'utf8'
+})
+```
+
+#### SM3
+
+> Cryptographic Hash Algorithm.
+
+```js
+const { SM3_WASM } = require('gm-crypto')
+
+console.log(await SM3_WASM.digest('abc'))
+console.log(await SM3_WASM.digest('YWJj', 'base64'))
+console.log(await SM3_WASM.digest('616263', 'hex', 'base64'))
+```
+
+#### SM4
+
+> Block Cipher Algorithm.
+
+```js
+const { SM4_WASM } = require('gm-crypto')
+
+const key = '0123456789abcdeffedcba9876543210' // Any string of 32 hexadecimal digits
+const originalData = 'SM4 国标对称加密'
+
+/**
+ * Block cipher modes:
+ * - ECB: electronic codebook
+ * - CBC: cipher block chaining
+ */
+
+let encryptedData, decryptedData
+
+// ECB
+encryptedData = await SM4_WASM.encrypt(originalData, key, {
+  inputEncoding: 'utf8',
+  outputEncoding: 'base64'
+})
+decryptedData = await SM4_WASM.decrypt(encryptedData, key, {
+  inputEncoding: 'base64',
+  outputEncoding: 'utf8'
+})
+
+// CBC
+const iv = '0123456789abcdeffedcba9876543210' // Initialization vector(any string of 32 hexadecimal digits)
+encryptedData = SM4.encrypt(originalData, key, {
+  iv: iv,
+  mode: SM4.constants.CBC,
+  inputEncoding: 'utf8',
+  outputEncoding: 'hex'
+})
+decryptedData = SM4.decrypt(encryptedData, key, {
+  iv: iv,
+  mode: SM4.constants.CBC,
+  inputEncoding: 'hex',
+  outputEncoding: 'utf8'
+})
+```
+
 ## API
 
 - [SM2](#api)

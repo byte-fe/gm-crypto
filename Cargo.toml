@@ -1,0 +1,26 @@
+[package]
+name = "gm-crypto-wasm"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+crate-type = ["cdylib"]
+path = "wasm/lib.rs"
+
+[features]
+default = ["console_error_panic_hook"]
+
+[dependencies]
+wasm-bindgen = "0.2.74"
+smcrypto = "0.2.1"
+getrandom = { version = "0.2", features = ["js"] }
+
+console_error_panic_hook = { version = "0.1.6", optional = true }
+
+wee_alloc = { version = "0.4.5", optional = true }
+
+[dev-dependencies]
+wasm-bindgen-test = "0.3.13"
+
+[profile.release]
+opt-level = 3
