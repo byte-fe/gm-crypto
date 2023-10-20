@@ -11,32 +11,32 @@ export default {
     {
       name: 'gm-crypto',
       file: 'dist/index.js',
-      format: 'umd'
-      //   plugins: [terser()]
+      format: 'umd',
+      plugins: [terser()]
     },
     {
       name: 'gm-crypto',
       file: 'dist/index.esm.js',
-      format: 'es'
-      //   plugins: [terser()]
+      format: 'es',
+      plugins: [terser()]
     },
     {
       name: 'gm-crypto',
       file: 'dist/index.modern.js',
-      format: 'es'
-      //   plugins: [terser()]
+      format: 'es',
+      plugins: [terser()]
     },
     {
       name: 'gm-crypto',
       file: 'dist/index.commonjs.js',
-      format: 'commonjs'
-      //   plugins: [terser()]
+      format: 'commonjs',
+      plugins: [terser()]
     },
     {
       name: 'gm-crypto',
       file: 'dist/index.umd.js',
-      format: 'umd'
-      //   plugins: [terser()]
+      format: 'umd',
+      plugins: [terser()]
     }
   ],
   plugins: [
