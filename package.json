@@ -16,9 +16,9 @@
     "build:coverage": "npm run clean && npm run build:rollup",
     "test": "npm run build:coverage && nyc --reporter=json ava -v",
     "prepublishOnly": "npm run build",
-    "build:wasm": "wasm-bindgen --out-dir ./src/wasm/pkg --typescript ./target/wasm32-unknown-unknown/release/gm_crypto_wasm.wasm",
+    "build:wasm": "wasm-bindgen --target web --out-dir ./src/wasm/pkg --typescript ./target/wasm32-unknown-unknown/release/gm_crypto_wasm.wasm",
     "build:rollup": "rollup --config",
-    "test:ava": "npm run build:rollup && ava && npm run clean"
+    "test:ava": " ava"
   },
   "repository": {
     "type": "git",

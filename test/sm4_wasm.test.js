@@ -483,22 +483,24 @@ test('ECB', async (t) => {
 
   // Official example
   t.is(
-    SM4.encrypt(
-      '0123456789abcdeffedcba9876543210',
-      '0123456789abcdeffedcba9876543210',
-      {
-        inputEncoding: 'hex',
-        outputEncoding: 'hex'
-      }
+    (
+      await SM4_WASM.encrypt(
+        '0123456789abcdeffedcba9876543210',
+        '0123456789abcdeffedcba9876543210',
+        {
+          inputEncoding: 'hex',
+          outputEncoding: 'hex'
+        }
+      )
     ).substring(0, 32),
     '681edf34d206965e86b3e94f536e4246'
   )
 
   // hex
-  cipherData = SM4.encrypt(data, key, {
+  cipherData = await SM4_WASM.encrypt(data, key, {
     outputEncoding: 'hex'
   })
-  plainData = SM4.decrypt(cipherData, key, {
+  plainData = await SM4_WASM.decrypt(cipherData, key, {
     inputEncoding: 'hex',
     outputEncoding: 'utf8'
   })
@@ -506,10 +508,10 @@ test('ECB', async (t) => {
   t.is(plainData, data)
 
   // base64
-  cipherData = SM4.encrypt(data, key, {
+  cipherData = await SM4_WASM.encrypt(data, key, {
     outputEncoding: 'base64'
   })
-  plainData = SM4.decrypt(cipherData, key, {
+  plainData = await SM4_WASM.decrypt(cipherData, key, {
     inputEncoding: 'base64',
     outputEncoding: 'utf8'
   })
@@ -517,8 +519,11 @@ test('ECB', async (t) => {
   t.is(plainData, data)
 
   // ArrayBuffer
-  cipherData = SM4.encrypt(toArrayBuffer(Buffer.from(data, 'utf8')), key)
-  plainData = SM4.decrypt(cipherData, key)
+  cipherData = await SM4_WASM.encrypt(
+    toArrayBuffer(Buffer.from(data, 'utf8')),
+    key
+  )
+  plainData = await SM4_WASM.decrypt(cipherData, key)
   t.true(cipherData instanceof ArrayBuffer)
   t.true(plainData instanceof ArrayBuffer)
   t.is(Buffer.from(plainData).toString('utf8'), data)
@@ -530,12 +535,12 @@ test('CBC', async (t) => {
   let cipherData, plainData
 
   // hex
-  cipherData = SM4.encrypt(data, key, {
+  cipherData = await SM4_WASM.encrypt(data, key, {
     mode: CBC,
     iv,
     outputEncoding: 'hex'
   })
-  plainData = SM4.decrypt(cipherData, key, {
+  plainData = await SM4_WASM.decrypt(cipherData, key, {
     mode: CBC,
     iv,
     inputEncoding: 'hex',
@@ -545,12 +550,12 @@ test('CBC', async (t) => {
   t.is(plainData, data)
 
   // base64
-  cipherData = SM4.encrypt(data, key, {
+  cipherData = await SM4_WASM.encrypt(data, key, {
     mode: CBC,
     iv,
     outputEncoding: 'base64'
   })
-  plainData = SM4.decrypt(cipherData, key, {
+  plainData = await SM4_WASM.decrypt(cipherData, key, {
     mode: CBC,
     iv,
     inputEncoding: 'base64',
@@ -560,18 +565,18 @@ test('CBC', async (t) => {
   t.is(plainData, data)
 
   // ArrayBuffer
-  cipherData = SM4.encrypt(data, key, {
+  cipherData = await SM4_WASM.encrypt(data, key, {
     mode: CBC,
     iv
   })
-  plainData = SM4.decrypt(cipherData, key, {
+  plainData = await SM4_WASM.decrypt(cipherData, key, {
     mode: CBC,
     iv,
     outputEncoding: 'utf8'
   })
   t.true(cipherData instanceof ArrayBuffer)
   t.is(plainData, data)
-  plainData = SM4.decrypt(cipherData, key, {
+  plainData = await SM4_WASM.decrypt(cipherData, key, {
     mode: CBC,
     iv
   })

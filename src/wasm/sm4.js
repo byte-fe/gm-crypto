@@ -33,11 +33,13 @@ export const encrypt = async (data, key, options) => {
   if (!REG_EXP_KEY.test(key)) {
     throw new TypeError('Invalid value of cipher `key`')
   }
+  key = Buffer.from(key, 'hex')
 
   // CBC 分组必须制定 iv
   if (mode === CBC && !REG_EXP_KEY.test(iv)) {
     throw new TypeError('Invalid value of `iv` option')
   }
+  iv = mode === CBC ? Buffer.from(iv, 'hex') : null
 
   const gm_wasm = await WASMManager.getInstance()
 
@@ -73,10 +75,14 @@ export const decrypt = async (data, key, options) => {
     throw new TypeError('Invalid value of cipher `key`')
   }
 
+  key = Buffer.from(key, 'hex')
+
   // CBC 分组必须制定 iv
   if (mode === CBC && !REG_EXP_KEY.test(iv)) {
     throw new TypeError('Invalid value of `iv` option')
   }
+
+  iv = mode === CBC ? Buffer.from(iv, 'hex') : null
 
   const gm_wasm = await WASMManager.getInstance()
 

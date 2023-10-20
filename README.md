@@ -174,18 +174,32 @@ decryptedData = await SM4_WASM.decrypt(encryptedData, key, {
 
 // CBC
 const iv = '0123456789abcdeffedcba9876543210' // Initialization vector(any string of 32 hexadecimal digits)
-encryptedData = SM4.encrypt(originalData, key, {
+encryptedData = await SM4_WASM.encrypt(originalData, key, {
   iv: iv,
   mode: SM4.constants.CBC,
   inputEncoding: 'utf8',
   outputEncoding: 'hex'
 })
-decryptedData = SM4.decrypt(encryptedData, key, {
+decryptedData = await SM4_WASM.decrypt(encryptedData, key, {
   iv: iv,
   mode: SM4.constants.CBC,
   inputEncoding: 'hex',
   outputEncoding: 'utf8'
 })
+```
+
+#### benchmark
+
+```
+// node ./benchmark
+jsSM2EncryptAndDecrypt: 790.3877921104431 ms
+wasmSM2EncryptAndDecrypt: 479.68216705322266 ms
+
+jsSM3Digest: 7.825915813446045 ms
+wasmSM3Digest: 173.00870895385742 ms
+
+jsSM4EncryptAndDecrypt: 153.97879076004028 ms
+wasmSM4EncryptAndDecrypt: 94.64054203033447 ms
 ```
 
 ## API

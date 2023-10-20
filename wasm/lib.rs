@@ -80,25 +80,25 @@ pub fn sm3_digest(buffer: Vec<u8>) -> String {
 }
 
 #[wasm_bindgen]
-pub fn sm4_encrypt_ecb(k: String, buffer: Vec<u8>) -> Vec<u8> {
-    let sm4_ecb = sm4::CryptSM4ECB::new(k.as_bytes());
+pub fn sm4_encrypt_ecb(k: Vec<u8>, buffer: Vec<u8>) -> Vec<u8> {
+    let sm4_ecb = sm4::CryptSM4ECB::new(&k);
     sm4_ecb.encrypt_ecb(&buffer)
 }
 
 #[wasm_bindgen]
-pub fn sm4_encrypt_cbc(k: String, iv: String, buffer: Vec<u8>) -> Vec<u8> {
-    let sm4_cbc = sm4::CryptSM4CBC::new(k.as_bytes(), iv.as_bytes());
+pub fn sm4_encrypt_cbc(k: Vec<u8>, iv: Vec<u8>, buffer: Vec<u8>) -> Vec<u8> {
+    let sm4_cbc = sm4::CryptSM4CBC::new(&k, &iv);
     sm4_cbc.encrypt_cbc(&buffer)
 }
 
 #[wasm_bindgen]
-pub fn sm4_decrypt_ecb(k: String, buffer: Vec<u8>) -> Vec<u8> {
-    let sm4_ecb = sm4::CryptSM4ECB::new(k.as_bytes());
+pub fn sm4_decrypt_ecb(k: Vec<u8>, buffer: Vec<u8>) -> Vec<u8> {
+    let sm4_ecb = sm4::CryptSM4ECB::new(&k);
     sm4_ecb.decrypt_ecb(&buffer)
 }
 
 #[wasm_bindgen]
-pub fn sm4_decrypt_cbc(k: String, iv: String, buffer: Vec<u8>) -> Vec<u8> {
-    let sm4_cbc = sm4::CryptSM4CBC::new(k.as_bytes(), iv.as_bytes());
+pub fn sm4_decrypt_cbc(k: Vec<u8>, iv: Vec<u8>, buffer: Vec<u8>) -> Vec<u8> {
+    let sm4_cbc = sm4::CryptSM4CBC::new(&k, &iv);
     sm4_cbc.decrypt_cbc(&buffer)
 }
