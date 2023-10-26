@@ -18,6 +18,8 @@ A pure JavaScript implementation of GM/T series(sm2,sm3,sm4) cryptographic algor
 
 ### Install
 
+If you want to use a better performing version, please use [gm-crypto-wasm](https://github.com/akitaSummer/gm-crypto-wasm).
+
 Using npm:
 
 ```bash
